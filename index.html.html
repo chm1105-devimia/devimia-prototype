@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Devimia — The Verified Passport for Real Estate Developments</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --forest:#1C2B1E;--sand:#F5F0E8;--green:#2D5E36;--green-light:#4D8B55;
+  --terra:#AC937E;--terra-light:#C4AE9E;--white:#FFFFFF;
+  --text-on-dark:#F5F0E8;--text-muted-dark:rgba(245,240,232,0.65);
+  --radius:10px;--radius-lg:14px
+}
+html{scroll-behavior:smooth}
+body{font-family:'Georgia',serif;background:var(--sand);color:var(--forest);min-height:100vh}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+
+/* CONTEXT SWITCHER */
+.ctx-switcher{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 0 8px;background:var(--sand);position:sticky;top:0;z-index:100;border-bottom:0.5px solid rgba(28,43,30,.1)}
+.ctx-btn{padding:6px 18px;border-radius:20px;border:1.5px solid var(--forest);background:transparent;color:var(--forest);font-family:Georgia,serif;font-size:12px;cursor:pointer;letter-spacing:.04em;transition:all .2s}
+.ctx-btn.active{background:var(--forest);color:var(--sand)}
+.ctx{display:none}
+.ctx.active{display:block}
+
+/* NAV */
+nav{background:var(--forest);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:44px;z-index:99}
+.nav-logo{font-family:Georgia,serif;font-size:16px;font-weight:700;color:var(--sand);letter-spacing:.06em}
+.nav-logo span{color:var(--green-light)}
+.nav-links{display:flex;align-items:center;gap:20px}
+.nav-link{font-family:Georgia,serif;font-size:12px;color:var(--text-muted-dark);cursor:pointer;letter-spacing:.04em;transition:color .2s;text-decoration:none}
+.nav-link:hover{color:var(--sand)}
+.nav-cta{padding:5px 14px;border-radius:20px;border:1px solid var(--green-light);background:transparent;color:var(--green-light);font-family:Georgia,serif;font-size:12px;cursor:pointer;transition:all .2s}
+.nav-cta:hover{background:var(--green-light);color:var(--forest)}
+.nav-cta-solid{padding:5px 14px;border-radius:20px;border:none;background:var(--green);color:var(--sand);font-family:Georgia,serif;font-size:12px;cursor:pointer}
+
+/* HERO */
+.hero{background:var(--forest);padding:56px 24px 48px;text-align:center}
+.hero-tag{display:inline-block;font-size:10px;letter-spacing:.1em;color:var(--green-light);text-transform:uppercase;margin-bottom:16px;padding:4px 12px;border:1px solid var(--green-light);border-radius:20px}
+.hero-title{font-size:32px;font-weight:400;color:var(--sand);line-height:1.2;margin-bottom:14px;font-style:italic}
+.hero-title strong{font-style:normal;color:var(--green-light);font-weight:700}
+.hero-sub{font-size:14px;color:var(--text-muted-dark);line-height:1.7;margin-bottom:28px;max-width:520px;margin-left:auto;margin-right:auto}
+.hero-ctas{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.btn-primary{padding:11px 24px;border-radius:6px;border:none;background:var(--green);color:var(--sand);font-family:Georgia,serif;font-size:13px;cursor:pointer;transition:background .2s}
+.btn-primary:hover{background:var(--green-light)}
+.btn-outline{padding:11px 24px;border-radius:6px;border:1.5px solid var(--terra);background:transparent;color:var(--terra-light);font-family:Georgia,serif;font-size:13px;cursor:pointer}
+.btn-outline:hover{background:rgba(172,147,126,.15)}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:600px;margin:0 auto}
+.stat-card{background:rgba(255,255,255,.06);border-radius:var(--radius);padding:16px 12px;text-align:center;border:0.5px solid rgba(245,240,232,.12)}
+.stat-val{font-size:24px;font-weight:700;color:var(--sand)}
+.stat-lbl{font-size:10px;color:var(--text-muted-dark);margin-top:4px;letter-spacing:.04em}
+
+/* SECTIONS */
+.section{padding:48px 24px;max-width:720px;margin:0 auto}
+.section-full{padding:48px 24px}
+.section-alt{background:var(--forest);padding:48px 24px}
+.section-tag{font-size:10px;letter-spacing:.1em;color:var(--green);text-transform:uppercase;font-weight:700;margin-bottom:8px}
+.section-tag-light{font-size:10px;letter-spacing:.1em;color:var(--green-light);text-transform:uppercase;font-weight:700;margin-bottom:8px}
+.section-title{font-size:22px;font-weight:400;color:var(--forest);line-height:1.25;margin-bottom:10px;font-style:italic}
+.section-title strong{font-style:normal}
+.section-title-light{font-size:22px;font-weight:400;color:var(--sand);line-height:1.25;margin-bottom:10px;font-style:italic}
+.section-title-light strong{font-style:normal}
+.section-sub{font-size:13px;color:#5a6860;line-height:1.6}
+.section-sub-light{font-size:13px;color:var(--text-muted-dark);line-height:1.6}
+
+/* HOW IT WORKS */
+.steps-inner{max-width:720px;margin:0 auto}
+.steps{display:flex;flex-direction:column;gap:0;margin-top:20px}
+.step{display:flex;gap:18px;padding:18px 0;border-bottom:0.5px solid rgba(28,43,30,.12);align-items:flex-start}
+.step:last-child{border-bottom:none}
+.step-num{width:30px;height:30px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--sand);flex-shrink:0;margin-top:2px}
+.step-title{font-size:14px;font-weight:700;color:var(--forest);margin-bottom:4px}
+.step-desc{font-size:12px;color:#5a6860;line-height:1.6}
+
+/* BENEFITS */
+.benefits-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px;max-width:720px;margin-left:auto;margin-right:auto}
+.benefit-card{background:var(--white);border-radius:var(--radius);padding:16px;border:0.5px solid rgba(28,43,30,.12)}
+.benefit-icon{font-size:20px;color:var(--green);margin-bottom:10px}
+.benefit-title{font-size:13px;font-weight:700;color:var(--forest);margin-bottom:5px}
+.benefit-desc{font-size:12px;color:#5a6860;line-height:1.5}
+
+/* PRICING */
+.pricing-inner{max-width:720px;margin:0 auto}
+.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+.price-card{background:var(--white);border-radius:var(--radius-lg);padding:20px;border:1px solid rgba(28,43,30,.15);position:relative}
+.price-card.featured{border:2px solid var(--green)}
+.price-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--green);color:var(--sand);font-size:10px;padding:3px 12px;border-radius:10px;white-space:nowrap}
+.price-tier{font-size:11px;letter-spacing:.06em;color:var(--green);text-transform:uppercase;font-weight:700;margin-bottom:8px}
+.price-amount{font-size:26px;font-weight:700;color:var(--forest)}
+.price-amount span{font-size:13px;font-weight:400;color:#888}
+.price-monthly{font-size:11px;color:var(--green);margin-top:5px;margin-bottom:14px}
+.price-features{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.price-feat{font-size:12px;color:#444;display:flex;align-items:flex-start;gap:7px;line-height:1.4}
+.price-feat i{color:var(--green);font-size:14px;flex-shrink:0;margin-top:1px}
+.price-cta{width:100%;padding:9px;border-radius:6px;border:1.5px solid var(--green);background:transparent;color:var(--green);font-family:Georgia,serif;font-size:12px;cursor:pointer;transition:all .2s}
+.price-cta:hover{background:rgba(45,94,54,.08)}
+.price-card.featured .price-cta{background:var(--green);color:var(--sand);border-color:var(--green)}
+.price-card.featured .price-cta:hover{background:var(--green-light)}
+
+/* PASSPORT DEMO */
+.demo-inner{max-width:480px;margin:20px auto 0}
+.passport-demo{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;border:0.5px solid rgba(28,43,30,.15);box-shadow:0 4px 24px rgba(28,43,30,.15)}
+.passport-header{background:var(--green);padding:16px 18px;display:flex;align-items:center;justify-content:space-between}
+.passport-header-name{font-size:14px;font-weight:700;color:var(--sand)}
+.passport-header-sub{font-size:10px;color:rgba(245,240,232,.7);margin-top:2px}
+.passport-header-badge{font-size:10px;padding:4px 10px;background:rgba(255,255,255,.2);color:var(--sand);border-radius:10px;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.passport-body{padding:16px 18px}
+.passport-section-title{font-size:9px;letter-spacing:.08em;color:var(--terra);text-transform:uppercase;font-weight:700;margin-bottom:10px}
+.passport-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.passport-label{font-size:11px;color:#888}
+.passport-value{font-size:11px;font-weight:600;color:var(--forest)}
+.passport-ok{font-size:11px;font-weight:600;color:var(--green);display:flex;align-items:center;gap:3px}
+.p-divider{height:0.5px;background:rgba(28,43,30,.1);margin:12px 0}
+.phase-bar{display:flex;gap:3px;margin:8px 0}
+.phase-step{flex:1;height:5px;border-radius:3px;background:rgba(28,43,30,.1)}
+.phase-step.done{background:var(--green)}
+.phase-step.curr{background:var(--terra)}
+.phase-labels{display:flex;justify-content:space-between;font-size:9px;color:#aaa;margin-bottom:10px}
+.hash-box{font-family:'Courier New',monospace;font-size:9px;background:#f0ede7;padding:7px 10px;border-radius:6px;color:#888;word-break:break-all;margin-top:8px}
+
+/* VERIFIER */
+.verify-inner{max-width:560px;margin:20px auto 0}
+.verify-bar{display:flex;gap:8px;align-items:center}
+.verify-input{flex:1;font-size:12px;padding:9px 12px;border-radius:6px;border:1px solid rgba(28,43,30,.2);background:#fafaf8;font-family:Georgia,serif;color:var(--forest)}
+.verify-input:focus{outline:none;border-color:var(--green)}
+.verify-btn{padding:9px 16px;border-radius:6px;border:none;background:var(--green);color:var(--sand);font-size:12px;cursor:pointer;white-space:nowrap;font-family:Georgia,serif}
+.verified-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:#e8f5ee;border-radius:6px;font-size:12px;color:var(--green);font-weight:600;margin-top:12px;border:0.5px solid rgba(45,94,54,.25)}
+
+/* FOOTER */
+footer{background:var(--forest);padding:28px 24px;text-align:center}
+.footer-logo{font-size:18px;font-weight:700;color:var(--sand);letter-spacing:.06em;margin-bottom:10px}
+.footer-links{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+.footer-link{font-size:11px;color:var(--text-muted-dark);cursor:pointer}
+.footer-bottom{font-size:10px;color:rgba(245,240,232,.35)}
+
+/* ========= WEB APP ========= */
+.app-shell{display:flex;min-height:calc(100vh - 96px);background:var(--sand)}
+.app-sidebar{width:190px;background:var(--forest);flex-shrink:0;padding:16px 0;position:sticky;top:96px;height:calc(100vh - 96px);overflow-y:auto}
+.app-sidebar-logo{font-size:14px;font-weight:700;color:var(--sand);padding:0 16px 16px;border-bottom:0.5px solid rgba(245,240,232,.15);letter-spacing:.06em}
+.sidebar-nav{padding:12px 0}
+.sidebar-item{display:flex;align-items:center;gap:9px;padding:9px 16px;cursor:pointer;transition:background .15s;font-size:12px;color:var(--text-muted-dark);font-family:Georgia,serif}
+.sidebar-item:hover{background:rgba(245,240,232,.06);color:var(--sand)}
+.sidebar-item.active{background:rgba(77,139,85,.2);color:var(--green-light)}
+.sidebar-item i{font-size:16px;flex-shrink:0}
+.sidebar-section{font-size:9px;letter-spacing:.1em;color:rgba(245,240,232,.3);padding:14px 16px 4px;text-transform:uppercase}
+.app-main{flex:1;padding:24px;overflow-y:auto;max-width:800px}
+.app-page{display:none}
+.app-page.active{display:block}
+.app-header{margin-bottom:22px}
+.app-title{font-size:20px;font-weight:400;color:var(--forest);font-style:italic}
+.app-title strong{font-style:normal}
+.app-sub{font-size:12px;color:#888;margin-top:4px}
+
+/* PASSPORT CARDS */
+.passport-cards{display:flex;flex-direction:column;gap:12px}
+.pc{background:var(--white);border-radius:var(--radius-lg);border:0.5px solid rgba(28,43,30,.12);overflow:hidden}
+.pc-top{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:0.5px solid rgba(28,43,30,.08)}
+.pc-icon{width:36px;height:36px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pc-icon i{font-size:18px;color:var(--sand)}
+.pc-info{flex:1}
+.pc-name{font-size:14px;font-weight:600;color:var(--forest)}
+.pc-location{font-size:11px;color:#888;margin-top:2px}
+.pc-status{font-size:10px;padding:4px 10px;border-radius:10px;font-weight:600;white-space:nowrap}
+.status-active{background:#e8f5ee;color:var(--green)}
+.status-pending{background:#faeeda;color:#633806}
+.status-draft{background:#f0ede7;color:#888}
+.pc-body{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(28,43,30,.08)}
+.pc-stat{background:var(--white);padding:12px;text-align:center}
+.pc-stat-val{font-size:14px;font-weight:600;color:var(--forest)}
+.pc-stat-lbl{font-size:10px;color:#888;margin-top:3px}
+.pc-actions{display:flex;gap:8px;padding:10px 14px;background:#fafaf8}
+.pc-action{flex:1;padding:7px;border-radius:6px;border:1px solid rgba(28,43,30,.15);background:transparent;font-family:Georgia,serif;font-size:11px;color:var(--forest);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:background .15s}
+.pc-action:hover{background:rgba(28,43,30,.05)}
+.pc-action.primary{background:var(--green);color:var(--sand);border-color:var(--green)}
+.pc-action.primary:hover{background:var(--green-light)}
+.pc-action i{font-size:14px}
+
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.metric{background:var(--white);border-radius:var(--radius);padding:14px;border:0.5px solid rgba(28,43,30,.1)}
+.metric-val{font-size:22px;font-weight:700;color:var(--forest)}
+.metric-lbl{font-size:10px;color:#888;margin-top:3px}
+.metric-delta{font-size:10px;color:var(--green);margin-top:3px}
+
+/* ALERT */
+.alert{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:var(--radius);margin-bottom:14px}
+.alert-warning{background:#faeeda;border:0.5px solid rgba(186,117,23,.3)}
+.alert-text{flex:1}
+.alert-title{font-size:12px;font-weight:700;color:#633806}
+.alert-desc{font-size:11px;color:#7a5a2a;margin-top:3px;line-height:1.5}
+.alert i{font-size:17px;color:#BA7517;flex-shrink:0;margin-top:1px}
+.alert-action{font-size:11px;font-weight:600;color:var(--green);cursor:pointer;margin-top:8px;display:inline-block}
+
+/* ONBOARDING */
+.ob-stepper{display:flex;gap:0;margin-bottom:22px;align-items:flex-start}
+.ob-step-wrap{display:flex;flex-direction:column;align-items:center;flex:0 0 auto}
+.ob-step-dot{width:28px;height:28px;border-radius:50%;border:2px solid rgba(28,43,30,.2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#888;background:var(--white)}
+.ob-step-dot.done{background:var(--green);border-color:var(--green);color:var(--sand)}
+.ob-step-dot.curr{background:var(--forest);border-color:var(--forest);color:var(--sand)}
+.ob-step-line{flex:1;height:2px;background:rgba(28,43,30,.15);margin-top:14px}
+.ob-step-line.done{background:var(--green)}
+.ob-step-label{font-size:10px;color:#888;margin-top:5px;text-align:center;max-width:60px}
+.ob-step-label.curr{color:var(--forest);font-weight:600}
+.ob-card{background:var(--white);border-radius:var(--radius-lg);border:0.5px solid rgba(28,43,30,.12);padding:20px}
+.form-label{font-size:11px;color:#666;margin-bottom:5px;display:block;font-weight:600}
+.form-input{width:100%;padding:8px 11px;border-radius:6px;border:1px solid rgba(28,43,30,.2);font-family:Georgia,serif;font-size:12px;color:var(--forest);background:#fafaf8;margin-bottom:12px}
+.form-input:focus{outline:none;border-color:var(--green)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.upload-zone{border:1.5px dashed rgba(28,43,30,.25);border-radius:8px;padding:16px;text-align:center;cursor:pointer;margin-bottom:10px}
+.upload-zone i{font-size:22px;color:var(--terra);margin-bottom:5px}
+.upload-zone-title{font-size:12px;color:var(--forest);font-weight:600}
+.upload-zone-sub{font-size:10px;color:#888;margin-top:3px}
+.doc-row{display:flex;align-items:center;justify-content:space-between;padding:9px 11px;background:#f7f5f2;border-radius:6px;margin-bottom:6px}
+.doc-name{font-size:11px;color:var(--forest);display:flex;align-items:center;gap:6px}
+.doc-req{font-size:10px;padding:3px 8px;border-radius:8px;font-weight:600}
+.doc-required{background:#faeeda;color:#633806}
+.doc-optional{background:#f0ede7;color:#888}
+.doc-ok{background:#e8f5ee;color:var(--green)}
+.ob-nav{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:16px;border-top:0.5px solid rgba(28,43,30,.1)}
+.ob-back{padding:8px 18px;border-radius:6px;border:1px solid rgba(28,43,30,.2);background:transparent;font-family:Georgia,serif;font-size:12px;cursor:pointer;color:var(--forest)}
+.ob-next{padding:8px 20px;border-radius:6px;border:none;background:var(--green);color:var(--sand);font-family:Georgia,serif;font-size:12px;cursor:pointer}
+
+/* TIMELINE */
+.tl{display:flex;flex-direction:column;gap:0}
+.tl-item{display:flex;gap:12px;align-items:flex-start}
+.tl-left{display:flex;flex-direction:column;align-items:center;width:28px;flex-shrink:0}
+.tl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.tl-dot.green{background:var(--green)}
+.tl-dot.terra{background:var(--terra)}
+.tl-dot.gray{background:#ccc}
+.tl-line{width:2px;background:rgba(28,43,30,.12);flex:1;min-height:20px}
+.tl-body{padding-bottom:18px;flex:1}
+.tl-label{font-size:13px;font-weight:600;color:var(--forest)}
+.tl-detail{font-size:11px;color:#888;margin-top:3px;line-height:1.5}
+.tl-time{font-size:10px;color:#bbb;margin-top:3px}
+
+/* RESOURCES */
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.res-card{background:var(--white);border-radius:var(--radius);border:0.5px solid rgba(28,43,30,.12);padding:16px}
+.res-icon{font-size:22px;color:var(--terra);margin-bottom:10px}
+.res-title{font-size:12px;font-weight:700;color:var(--forest);margin-bottom:5px}
+.res-desc{font-size:11px;color:#888;line-height:1.5;margin-bottom:12px}
+.res-dl{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--green);cursor:pointer;font-weight:600}
+.code-box{font-family:'Courier New',monospace;font-size:10px;background:#f0ede7;padding:7px 9px;border-radius:5px;color:#888;word-break:break-all;margin-bottom:10px}
+</style>
+</head>
+<body>
+
+<!-- CONTEXT SWITCHER -->
+<div class="ctx-switcher">
+  <button class="ctx-btn active" onclick="switchCtx('public')"><i class="ti ti-world"></i> Web pública</button>
+  <button class="ctx-btn" onclick="switchCtx('app')"><i class="ti ti-layout-dashboard"></i> Web app</button>
+</div>
+
+<!-- ===================== PUBLIC WEB ===================== -->
+<div id="ctx-public" class="ctx active">
+
+  <nav>
+    <div class="nav-logo">devi<span>mia</span></div>
+    <div class="nav-links">
+      <a class="nav-link" href="#pub-how">How it works</a>
+      <a class="nav-link" href="#pub-pricing">Pricing</a>
+      <a class="nav-link" href="#pub-verify">Verify</a>
+      <button class="nav-cta" onclick="switchCtx('app')">Log in</button>
+      <button class="nav-cta-solid" onclick="switchCtx('app')">Get passport</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag"><i class="ti ti-shield-check"></i> Blockchain-verified · eIDAS signed</div>
+    <h1 class="hero-title">The verified passport<br><strong>your development deserves</strong></h1>
+    <p class="hero-sub">A certified, immutable document that proves every stage of your development — to any buyer, anywhere in the world.</p>
+    <div class="hero-ctas">
+      <button class="btn-primary" onclick="switchCtx('app')">Get your passport <i class="ti ti-arrow-right"></i></button>
+      <button class="btn-outline" onclick="document.getElementById('pub-demo').scrollIntoView({behavior:'smooth'})">See a live example</button>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-val">93K</div><div class="stat-lbl">Foreign buyers in Spain · 2024</div></div>
+      <div class="stat-card"><div class="stat-val">€285K</div><div class="stat-lbl">Average ticket · Costa</div></div>
+      <div class="stat-card"><div class="stat-val">0</div><div class="stat-lbl">European trust standards exist</div></div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div id="pub-how" class="section">
+    <div class="section-tag">How it works</div>
+    <h2 class="section-title">From onboarding to passport <strong>in 48 hours</strong></h2>
+    <div class="steps steps-inner">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Submit your development</div>
+          <div class="step-desc">Upload documentation and complete the development profile. Your legal representative signs digitally — no account needed to sign.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">We verify and certify</div>
+          <div class="step-desc">Cross-checked against the Mercantile Register and BORME. A unique hash is generated and recorded immutably on Polygon blockchain.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Publish and share</div>
+          <div class="step-desc">Bilingual PDF (ES/EN) delivered. Embeddable widget live on your website. Passport link ready for Idealista, Kyero and Rightmove.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BENEFITS -->
+  <div class="section-alt">
+    <div style="max-width:720px;margin:0 auto">
+      <div class="section-tag-light">Why Devimia</div>
+      <h2 class="section-title-light">Built for developers who <strong>want to sell internationally</strong></h2>
+      <div class="benefits-grid">
+        <div class="benefit-card"><div class="benefit-icon"><i class="ti ti-world"></i></div><div class="benefit-title">Trusted by international buyers</div><div class="benefit-desc">Foreign buyers can verify your development independently. No language barrier, no guesswork.</div></div>
+        <div class="benefit-card"><div class="benefit-icon"><i class="ti ti-shield-check"></i></div><div class="benefit-title">Blockchain-backed integrity</div><div class="benefit-desc">Every passport is hashed and recorded on Polygon. Impossible to alter after issuance.</div></div>
+        <div class="benefit-card"><div class="benefit-icon"><i class="ti ti-signature"></i></div><div class="benefit-title">eIDAS-qualified signature</div><div class="benefit-desc">Signed by the legal representative with a qualified digital certificate, valid across the EU.</div></div>
+        <div class="benefit-card"><div class="benefit-icon"><i class="ti ti-refresh"></i></div><div class="benefit-title">Updates as you build</div><div class="benefit-desc">Passport updates at each construction stage. Your widget always shows the current status.</div></div>
+        <div class="benefit-card"><div class="benefit-icon"><i class="ti ti-home"></i></div><div class="benefit-title">Works for local buyers too</div><div class="benefit-desc">Transparency has no nationality. Spanish buyers benefit equally from verified documentation.</div></div>
+        <div class="benefit-card"><div class="benefit-icon"><i class="ti ti-certificate"></i></div><div class="benefit-title">Optional notarial act</div><div class="benefit-desc">Upgrade to Verified tier for a digital notarial act — recognised across the EU without Apostille.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <div id="pub-pricing" class="section">
+    <div class="pricing-inner">
+      <div class="section-tag">Pricing</div>
+      <h2 class="section-title">Simple pricing. <strong>Recurring from day one.</strong></h2>
+      <p class="section-sub">First 20 developments: issuance fee waived. Monthly service fee applies from month 1.</p>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-tier"><i class="ti ti-shield"></i> Standard</div>
+          <div class="price-amount">€490 <span>issuance</span></div>
+          <div class="price-monthly">+ €50 / month active service</div>
+          <div class="price-features">
+            <div class="price-feat"><i class="ti ti-check"></i>eIDAS qualified signature</div>
+            <div class="price-feat"><i class="ti ti-check"></i>Blockchain hash (Polygon)</div>
+            <div class="price-feat"><i class="ti ti-check"></i>Public verification page + QR</div>
+            <div class="price-feat"><i class="ti ti-check"></i>Bilingual PDF (ES/EN)</div>
+            <div class="price-feat"><i class="ti ti-check"></i>Embeddable widget for your site</div>
+            <div class="price-feat"><i class="ti ti-check"></i>Automatic stage updates</div>
+          </div>
+          <button class="price-cta" onclick="switchCtx('app')">Get started</button>
+        </div>
+        <div class="price-card featured">
+          <div class="price-badge"><i class="ti ti-shield-check"></i> Recommended</div>
+          <div class="price-tier"><i class="ti ti-shield-check"></i> Verified</div>
+          <div class="price-amount">€690 <span>issuance</span></div>
+          <div class="price-monthly">+ €50 / month active service</div>
+          <div class="price-features">
+            <div class="price-feat"><i class="ti ti-check"></i>Everything in Standard</div>
+            <div class="price-feat"><i class="ti ti-check"></i>Digital notarial act included</div>
+            <div class="price-feat"><i class="ti ti-check"></i>No Apostille needed in EU</div>
+            <div class="price-feat"><i class="ti ti-check"></i>Verified badge on your widget</div>
+            <div class="price-feat"><i class="ti ti-check"></i>Priority processing</div>
+          </div>
+          <button class="price-cta" onclick="switchCtx('app')">Get Verified passport</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEMO PASSPORT -->
+  <div id="pub-demo" class="section-alt">
+    <div style="max-width:720px;margin:0 auto">
+      <div class="section-tag-light">Live example</div>
+      <h2 class="section-title-light">This is what your <strong>buyers will see</strong></h2>
+      <p class="section-sub-light" style="margin-bottom:20px">A real Devimia passport for a sample Costa development.</p>
+      <div class="demo-inner">
+        <div class="passport-demo">
+          <div class="passport-header">
+            <div>
+              <div class="passport-header-name">Residencial Las Gaviotas · Estepona</div>
+              <div class="passport-header-sub">Promociones Costa Sur, S.L. · Issued 12 Jun 2026</div>
+            </div>
+            <div class="passport-header-badge"><i class="ti ti-shield-check" style="font-size:11px"></i> Verified</div>
+          </div>
+          <div class="passport-body">
+            <div class="passport-section-title">Developer</div>
+            <div class="passport-row"><span class="passport-label">Company</span><span class="passport-value">Promociones Costa Sur, S.L.</span></div>
+            <div class="passport-row"><span class="passport-label">Registry</span><span class="passport-ok"><i class="ti ti-check" style="font-size:11px"></i> Active · Mercantile Register</span></div>
+            <div class="passport-row"><span class="passport-label">Insolvency</span><span class="passport-ok"><i class="ti ti-check" style="font-size:11px"></i> None · BORME</span></div>
+            <div class="p-divider"></div>
+            <div class="passport-section-title">Development</div>
+            <div class="passport-row"><span class="passport-label">Location</span><span class="passport-value">Estepona, Málaga</span></div>
+            <div class="passport-row"><span class="passport-label">Units</span><span class="passport-value">48 apartments · from €285,000</span></div>
+            <div class="passport-row"><span class="passport-label">Delivery</span><span class="passport-value">Q3 2026</span></div>
+            <div class="p-divider"></div>
+            <div class="passport-section-title">Construction stage</div>
+            <div class="phase-bar">
+              <div class="phase-step done"></div>
+              <div class="phase-step curr"></div>
+              <div class="phase-step"></div>
+              <div class="phase-step"></div>
+              <div class="phase-step"></div>
+              <div class="phase-step"></div>
+            </div>
+            <div class="phase-labels">
+              <span>Pre-permit</span><span style="color:var(--terra);font-weight:600">Permit</span><span>Finance</span><span>Started</span><span>>50%</span><span>Structure</span>
+            </div>
+            <div class="passport-row"><span class="passport-label">Building permit</span><span class="passport-ok"><i class="ti ti-check" style="font-size:11px"></i> Granted · verified</span></div>
+            <div class="passport-row"><span class="passport-label">Land registry</span><span class="passport-ok"><i class="ti ti-check" style="font-size:11px"></i> Nota simple · 10 Jun 2026</span></div>
+            <div class="passport-row"><span class="passport-label">Units reserved</span><span class="passport-value">38% · declared 12 Jun 2026</span></div>
+            <div class="p-divider"></div>
+            <div class="passport-section-title">Integrity</div>
+            <div class="hash-box">SHA-256: a7f3c2e1b9d84f05c3a12e87d6b94f2c1e0a8d5b3f7c9e2a4b6d8f0c2e4a6b8d</div>
+            <div class="passport-row" style="margin-top:8px"><span class="passport-label">Blockchain</span><span class="passport-ok"><i class="ti ti-check" style="font-size:11px"></i> Polygon · block #48291047</span></div>
+            <div class="passport-row"><span class="passport-label">Notarial act</span><span class="passport-ok"><i class="ti ti-check" style="font-size:11px"></i> Digital · 12 Jun 2026</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERIFIER -->
+  <div id="pub-verify" class="section">
+    <div class="verify-inner">
+      <div class="section-tag">Independent verifier</div>
+      <h2 class="section-title">Anyone can verify. <strong>No login required.</strong></h2>
+      <p class="section-sub" style="margin-bottom:20px">Paste a passport hash or ID to confirm it hasn't been altered since issuance.</p>
+      <div class="verify-bar">
+        <input class="verify-input" id="hash-input" placeholder="Paste passport hash or ID…" />
+        <button class="verify-btn" onclick="doVerify()"><i class="ti ti-shield-check"></i> Verify</button>
+      </div>
+      <div id="verify-result" style="display:none">
+        <div class="verified-badge"><i class="ti ti-check" style="font-size:15px"></i> Document verified — authentic and unmodified since 12 Jun 2026 · Polygon block #48291047</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA FINAL -->
+  <div class="section-alt" style="text-align:center">
+    <div style="display:inline-block;font-size:10px;letter-spacing:.1em;color:var(--green-light);text-transform:uppercase;margin-bottom:14px;padding:4px 12px;border:1px solid var(--green-light);border-radius:20px"><i class="ti ti-star"></i> First 20 developments · issuance free</div>
+    <h2 class="section-title-light" style="font-size:24px;margin-bottom:10px">The first 20 developments<br><strong>set the standard.</strong></h2>
+    <p class="section-sub-light" style="margin-bottom:24px;max-width:420px;margin-left:auto;margin-right:auto">Every buyer who sees your passport sees a developer who has nothing to hide.</p>
+    <button class="btn-primary" onclick="switchCtx('app')" style="font-size:14px;padding:13px 30px">Get your Devimia Passport <i class="ti ti-arrow-right"></i></button>
+    <div style="margin-top:12px;font-size:11px;color:var(--text-muted-dark)">devimia.com · cesar@devimia.com</div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">devimia</div>
+    <div class="footer-links">
+      <span class="footer-link">How it works</span>
+      <span class="footer-link">Pricing</span>
+      <span class="footer-link">Verify a passport</span>
+      <span class="footer-link">Privacy policy</span>
+      <span class="footer-link">Legal notice</span>
+      <span class="footer-link">Cookie policy</span>
+    </div>
+    <div class="footer-bottom">© 2026 Devimia · Transparency powered by Polygon blockchain</div>
+  </footer>
+</div>
+
+<!-- ===================== WEB APP ===================== -->
+<div id="ctx-app" class="ctx">
+  <nav>
+    <div class="nav-logo">devi<span>mia</span> <span style="font-size:10px;color:var(--terra);font-style:italic;font-weight:400">app</span></div>
+    <div class="nav-links">
+      <span style="font-size:12px;color:var(--text-muted-dark)">Promociones Costa Sur, S.L.</span>
+      <button class="nav-cta"><i class="ti ti-user"></i> Account</button>
+    </div>
+  </nav>
+  <div class="app-shell">
+    <div class="app-sidebar">
+      <div class="app-sidebar-logo">devimia</div>
+      <div class="sidebar-nav">
+        <div class="sidebar-section">Main</div>
+        <div class="sidebar-item active" onclick="showPage('dashboard')"><i class="ti ti-layout-dashboard"></i> Dashboard</div>
+        <div class="sidebar-item" onclick="showPage('passports')"><i class="ti ti-passport"></i> My passports</div>
+        <div class="sidebar-item" onclick="showPage('new')"><i class="ti ti-plus"></i> New passport</div>
+        <div class="sidebar-section">Manage</div>
+        <div class="sidebar-item" onclick="showPage('status')"><i class="ti ti-activity"></i> Status & updates</div>
+        <div class="sidebar-item" onclick="showPage('resources')"><i class="ti ti-download"></i> Resources</div>
+        <div class="sidebar-section">Account</div>
+        <div class="sidebar-item"><i class="ti ti-settings"></i> Settings</div>
+        <div class="sidebar-item" onclick="switchCtx('public')"><i class="ti ti-world"></i> Public site</div>
+      </div>
+    </div>
+    <div class="app-main">
+
+      <!-- DASHBOARD -->
+      <div id="page-dashboard" class="app-page active">
+        <div class="app-header">
+          <div class="app-title">Good morning, <strong>Alejandro</strong></div>
+          <div class="app-sub">Overview of your Devimia passports</div>
+        </div>
+        <div class="alert alert-warning">
+          <i class="ti ti-alert-triangle"></i>
+          <div class="alert-text">
+            <div class="alert-title">Signature pending — Marina Altea Hills</div>
+            <div class="alert-desc">Carlos Mendoza has not yet signed. Link sent 2 hours ago. Expires in 70h.</div>
+            <span class="alert-action" onclick="showPage('status')">View status → Resend link</span>
+          </div>
+        </div>
+        <div class="metrics">
+          <div class="metric"><div class="metric-val">2</div><div class="metric-lbl">Active passports</div><div class="metric-delta"><i class="ti ti-arrow-up"></i> 1 this month</div></div>
+          <div class="metric"><div class="metric-val">147</div><div class="metric-lbl">Total verifications</div><div class="metric-delta"><i class="ti ti-arrow-up"></i> +23 this week</div></div>
+          <div class="metric"><div class="metric-val">1</div><div class="metric-lbl">Pending signature</div><div class="metric-delta" style="color:var(--terra)">Action required</div></div>
+        </div>
+        <div class="passport-cards">
+          <div class="pc">
+            <div class="pc-top">
+              <div class="pc-icon"><i class="ti ti-building"></i></div>
+              <div class="pc-info"><div class="pc-name">Residencial Las Gaviotas</div><div class="pc-location"><i class="ti ti-map-pin" style="font-size:11px"></i> Estepona, Málaga · 48 units</div></div>
+              <span class="pc-status status-active">Active</span>
+            </div>
+            <div class="pc-body">
+              <div class="pc-stat"><div class="pc-stat-val">Permit</div><div class="pc-stat-lbl">Stage</div></div>
+              <div class="pc-stat"><div class="pc-stat-val" style="color:var(--green)">38%</div><div class="pc-stat-lbl">Reserved</div></div>
+              <div class="pc-stat"><div class="pc-stat-val">89</div><div class="pc-stat-lbl">Verifications</div></div>
+            </div>
+            <div class="pc-actions">
+              <button class="pc-action" onclick="showPage('status')"><i class="ti ti-activity"></i> Status</button>
+              <button class="pc-action" onclick="showPage('resources')"><i class="ti ti-download"></i> Resources</button>
+              <button class="pc-action primary"><i class="ti ti-external-link"></i> View passport</button>
+            </div>
+          </div>
+          <div class="pc">
+            <div class="pc-top">
+              <div class="pc-icon" style="background:var(--terra)"><i class="ti ti-building"></i></div>
+              <div class="pc-info"><div class="pc-name">Marina Altea Hills</div><div class="pc-location"><i class="ti ti-map-pin" style="font-size:11px"></i> Altea, Alicante · 32 units</div></div>
+              <span class="pc-status status-pending">Pending signature</span>
+            </div>
+            <div class="pc-body">
+              <div class="pc-stat"><div class="pc-stat-val">Pre-permit</div><div class="pc-stat-lbl">Stage</div></div>
+              <div class="pc-stat"><div class="pc-stat-val" style="color:#aaa">—</div><div class="pc-stat-lbl">Reserved</div></div>
+              <div class="pc-stat"><div class="pc-stat-val">58</div><div class="pc-stat-lbl">Verifications</div></div>
+            </div>
+            <div class="pc-actions">
+              <button class="pc-action" onclick="showPage('status')"><i class="ti ti-clock"></i> Check status</button>
+              <button class="pc-action primary" style="background:var(--terra);border-color:var(--terra)"><i class="ti ti-send"></i> Resend link</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MY PASSPORTS -->
+      <div id="page-passports" class="app-page">
+        <div class="app-header">
+          <div class="app-title"><strong>My passports</strong></div>
+          <div class="app-sub">All developments with a Devimia passport</div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:14px">
+          <button class="ob-next" onclick="showPage('new')"><i class="ti ti-plus"></i> New passport</button>
+        </div>
+        <div class="passport-cards">
+          <div class="pc">
+            <div class="pc-top">
+              <div class="pc-icon"><i class="ti ti-building"></i></div>
+              <div class="pc-info"><div class="pc-name">Residencial Las Gaviotas</div><div class="pc-location">Estepona · Verified tier · Issued 12 Jun 2026</div></div>
+              <span class="pc-status status-active">Active</span>
+            </div>
+            <div class="pc-body">
+              <div class="pc-stat"><div class="pc-stat-val">Permit</div><div class="pc-stat-lbl">Stage</div></div>
+              <div class="pc-stat"><div class="pc-stat-val" style="color:var(--green)">89</div><div class="pc-stat-lbl">Verifications</div></div>
+              <div class="pc-stat"><div class="pc-stat-val">€50</div><div class="pc-stat-lbl">Monthly</div></div>
+            </div>
+            <div class="pc-actions">
+              <button class="pc-action"><i class="ti ti-edit"></i> Update stage</button>
+              <button class="pc-action"><i class="ti ti-code"></i> Widget code</button>
+              <button class="pc-action primary"><i class="ti ti-external-link"></i> Public view</button>
+            </div>
+          </div>
+          <div class="pc">
+            <div class="pc-top">
+              <div class="pc-icon" style="background:var(--terra)"><i class="ti ti-building"></i></div>
+              <div class="pc-info"><div class="pc-name">Marina Altea Hills</div><div class="pc-location">Altea · Standard tier · Draft 31 May 2026</div></div>
+              <span class="pc-status status-pending">Pending signature</span>
+            </div>
+            <div class="pc-body">
+              <div class="pc-stat"><div class="pc-stat-val">Pre-permit</div><div class="pc-stat-lbl">Stage</div></div>
+              <div class="pc-stat"><div class="pc-stat-val" style="color:var(--terra)">!</div><div class="pc-stat-lbl">Awaiting sig.</div></div>
+              <div class="pc-stat"><div class="pc-stat-val">—</div><div class="pc-stat-lbl">Monthly</div></div>
+            </div>
+            <div class="pc-actions">
+              <button class="pc-action" onclick="showPage('status')"><i class="ti ti-send"></i> Resend to signer</button>
+              <button class="pc-action primary" style="background:var(--terra);border-color:var(--terra)"><i class="ti ti-edit"></i> Edit draft</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEW PASSPORT -->
+      <div id="page-new" class="app-page">
+        <div class="app-header">
+          <div class="app-title">New passport — <strong>onboarding</strong></div>
+          <div class="app-sub">Complete all steps to issue your Devimia Passport</div>
+        </div>
+        <div class="ob-stepper">
+          <div class="ob-step-wrap"><div class="ob-step-dot done"><i class="ti ti-check" style="font-size:12px"></i></div><div class="ob-step-label">Promotion</div></div>
+          <div class="ob-step-line done"></div>
+          <div class="ob-step-wrap"><div class="ob-step-dot curr">2</div><div class="ob-step-label curr">Documents</div></div>
+          <div class="ob-step-line"></div>
+          <div class="ob-step-wrap"><div class="ob-step-dot">3</div><div class="ob-step-label">Tier & sign</div></div>
+          <div class="ob-step-line"></div>
+          <div class="ob-step-wrap"><div class="ob-step-dot">4</div><div class="ob-step-label">Review</div></div>
+        </div>
+        <div class="ob-card">
+          <div style="font-size:14px;font-weight:600;color:var(--forest);margin-bottom:16px">Step 2 — Upload documentation</div>
+          <div class="upload-zone">
+            <i class="ti ti-upload"></i>
+            <div class="upload-zone-title">Drop files here or click to upload</div>
+            <div class="upload-zone-sub">PDF, JPG, PNG · max 10MB per file</div>
+          </div>
+          <div class="doc-row"><span class="doc-name"><i class="ti ti-file"></i> Building permit (licencia de obra)</span><span class="doc-req doc-ok"><i class="ti ti-check" style="font-size:11px"></i> Uploaded</span></div>
+          <div class="doc-row"><span class="doc-name"><i class="ti ti-file"></i> Land registry (nota simple)</span><span class="doc-req doc-ok"><i class="ti ti-check" style="font-size:11px"></i> Uploaded</span></div>
+          <div class="doc-row"><span class="doc-name"><i class="ti ti-file"></i> Developer finance confirmation</span><span class="doc-req doc-optional">Optional</span></div>
+          <div class="doc-row"><span class="doc-name"><i class="ti ti-photo"></i> Site photos (min. 3)</span><span class="doc-req doc-required">Required</span></div>
+          <div class="doc-row"><span class="doc-name"><i class="ti ti-file"></i> Decennial insurance</span><span class="doc-req doc-optional">Optional</span></div>
+          <div style="background:#faeeda;border-radius:6px;padding:10px 12px;margin-top:12px;font-size:11px;color:#633806;line-height:1.5"><i class="ti ti-alert-triangle"></i> By uploading, the developer declares all documents are authentic and current. This declaration is linked to the passport.</div>
+          <div class="ob-nav">
+            <button class="ob-back">← Back</button>
+            <button class="ob-next">Continue → Tier & sign</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATUS -->
+      <div id="page-status" class="app-page">
+        <div class="app-header">
+          <div class="app-title">Status & <strong>updates</strong></div>
+          <div class="app-sub">Real-time status of all your passport processes</div>
+        </div>
+        <div class="ob-card" style="margin-bottom:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div style="font-size:14px;font-weight:600;color:var(--forest)">Residencial Las Gaviotas</div>
+            <span class="pc-status status-active">Active</span>
+          </div>
+          <div class="tl">
+            <div class="tl-item"><div class="tl-left"><div class="tl-dot green"></div><div class="tl-line"></div></div><div class="tl-body"><div class="tl-label">Passport issued</div><div class="tl-detail">Stage: Building permit granted. Hash recorded on Polygon block #48291047.</div><div class="tl-time">12 Jun 2026 · 09:14</div></div></div>
+            <div class="tl-item"><div class="tl-left"><div class="tl-dot green"></div><div class="tl-line"></div></div><div class="tl-body"><div class="tl-label">Notarial act completed</div><div class="tl-detail">Digital notarial act signed by Carlos Mendoza Pérez, Administrador único.</div><div class="tl-time">12 Jun 2026 · 08:51</div></div></div>
+            <div class="tl-item"><div class="tl-left"><div class="tl-dot green"></div><div class="tl-line"></div></div><div class="tl-body"><div class="tl-label">Legal representative signed</div><div class="tl-detail">eIDAS qualified signature received from c.mendoza@costasur.es</div><div class="tl-time">11 Jun 2026 · 17:22</div></div></div>
+            <div class="tl-item"><div class="tl-left"><div class="tl-dot green"></div></div><div class="tl-body"><div class="tl-label">Draft submitted</div><div class="tl-detail">All required documents uploaded. Sent for signature to Carlos Mendoza.</div><div class="tl-time">10 Jun 2026 · 14:05</div></div></div>
+          </div>
+        </div>
+        <div class="ob-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+            <div style="font-size:14px;font-weight:600;color:var(--forest)">Marina Altea Hills</div>
+            <span class="pc-status status-pending">Pending signature</span>
+          </div>
+          <div class="alert alert-warning" style="margin-bottom:14px">
+            <i class="ti ti-clock"></i>
+            <div class="alert-text">
+              <div class="alert-title">Awaiting signature · 70h remaining</div>
+              <div class="alert-desc">Sent to c.mendoza@costasur.es on 1 Jun 2026 at 10:30. Email opened.</div>
+              <div style="display:flex;gap:8px;margin-top:10px">
+                <button style="padding:6px 14px;border-radius:6px;border:none;background:var(--green);color:var(--sand);font-size:11px;cursor:pointer;font-family:Georgia,serif"><i class="ti ti-send"></i> Resend link</button>
+                <button style="padding:6px 14px;border-radius:6px;border:1px solid rgba(28,43,30,.2);background:transparent;font-size:11px;cursor:pointer;font-family:Georgia,serif"><i class="ti ti-user-edit"></i> Change signatory</button>
+              </div>
+            </div>
+          </div>
+          <div class="tl">
+            <div class="tl-item"><div class="tl-left"><div class="tl-dot terra"></div><div class="tl-line"></div></div><div class="tl-body"><div class="tl-label">Email opened</div><div class="tl-detail">Signatory opened the email. Link not yet clicked.</div><div class="tl-time">1 Jun 2026 · 11:42</div></div></div>
+            <div class="tl-item"><div class="tl-left"><div class="tl-dot green"></div></div><div class="tl-body"><div class="tl-label">Signature request sent</div><div class="tl-detail">Link sent to c.mendoza@costasur.es. Expires 4 Jun 2026.</div><div class="tl-time">1 Jun 2026 · 10:30</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESOURCES -->
+      <div id="page-resources" class="app-page">
+        <div class="app-header">
+          <div class="app-title">Download <strong>resources</strong></div>
+          <div class="app-sub">Everything you need to share and embed your passport</div>
+        </div>
+        <div style="font-size:13px;font-weight:600;color:var(--forest);margin-bottom:12px;display:flex;align-items:center;gap:6px"><i class="ti ti-building" style="color:var(--green)"></i> Residencial Las Gaviotas</div>
+        <div class="res-grid">
+          <div class="res-card"><div class="res-icon"><i class="ti ti-file-type-pdf"></i></div><div class="res-title">Passport PDF (English)</div><div class="res-desc">Full bilingual passport ready to share with international buyers. Includes QR verification code.</div><div class="res-dl"><i class="ti ti-download"></i> Download PDF</div></div>
+          <div class="res-card"><div class="res-icon"><i class="ti ti-file-type-pdf"></i></div><div class="res-title">Pasaporte PDF (Español)</div><div class="res-desc">Versión en español del pasaporte completo con código QR de verificación.</div><div class="res-dl"><i class="ti ti-download"></i> Descargar PDF</div></div>
+          <div class="res-card"><div class="res-icon"><i class="ti ti-code"></i></div><div class="res-title">Widget embed code</div><div class="res-desc">One-line JS snippet to embed the Devimia seal on your development website.</div><div class="code-box">&lt;script src="https://devimia.com/widget/las-gaviotas"&gt;&lt;/script&gt;</div><div class="res-dl"><i class="ti ti-copy"></i> Copy code</div></div>
+          <div class="res-card"><div class="res-icon"><i class="ti ti-link"></i></div><div class="res-title">Public passport URL</div><div class="res-desc">Direct link to the public passport page — add to your Idealista, Kyero or Rightmove listings.</div><div class="code-box">verify.devimia.com/p/las-gaviotas</div><div class="res-dl"><i class="ti ti-copy"></i> Copy URL</div></div>
+          <div class="res-card"><div class="res-icon"><i class="ti ti-qrcode"></i></div><div class="res-title">QR code</div><div class="res-desc">Downloadable QR code that links to the public verification page. Print on brochures.</div><div class="res-dl"><i class="ti ti-download"></i> Download QR (PNG)</div></div>
+          <div class="res-card"><div class="res-icon"><i class="ti ti-shield-check"></i></div><div class="res-title">Devimia seal (image)</div><div class="res-desc">PNG and SVG versions of the Devimia Verified seal for presentations and print materials.</div><div class="res-dl"><i class="ti ti-download"></i> Download seal assets</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function switchCtx(id){
+  document.querySelectorAll('.ctx').forEach(function(c){c.classList.remove('active')});
+  document.querySelectorAll('.ctx-btn').forEach(function(b){b.classList.remove('active')});
+  document.getElementById('ctx-'+id).classList.add('active');
+  var btns=document.querySelectorAll('.ctx-btn');
+  if(id==='public') btns[0].classList.add('active');
+  else btns[1].classList.add('active');
+  window.scrollTo(0,0);
+}
+function showPage(id){
+  document.querySelectorAll('.app-page').forEach(function(p){p.classList.remove('active')});
+  document.querySelectorAll('.sidebar-item').forEach(function(i){i.classList.remove('active')});
+  document.getElementById('page-'+id).classList.add('active');
+  var map={dashboard:0,passports:1,new:2,status:3,resources:4};
+  var items=document.querySelectorAll('.sidebar-item');
+  if(map[id]!==undefined) items[map[id]].classList.add('active');
+  document.querySelector('.app-main').scrollTo(0,0);
+}
+function doVerify(){
+  var v=document.getElementById('hash-input').value.trim();
+  var r=document.getElementById('verify-result');
+  r.style.display=v.length>5?'block':'none';
+}
+</script>
+</body>
+</html>
